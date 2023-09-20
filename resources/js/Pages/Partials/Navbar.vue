@@ -3,19 +3,50 @@
 
         <Head :title="$page.props?.pageTitle"></Head>
         <header class="border-b border-slate-200">
-            <div class="flex justify-between container mx-auto py-4">
+            <div class="flex justify-between container mx-auto py-3 items-center">
                 <div class="font-bold">
                     <Link href="/" class="text-blue-900 uppercase">Logo</Link>
                 </div>
                 <div class="items-center space-x-4" v-if="$page.props.auth.user">
-                    <Link href="/dashboard" class="text-blue-900 font-medium">Dashboard</Link>
-                    <Link href="/settings" class="text-blue-900 font-medium">Settings</Link>
-                    <Link href="/logout" method="post" as="button" class="text-blue-900 font-medium">Logout</Link>
+
+                    <Menu as="div" class="relative inline-block text-left">
+                        <MenuButton class="font-medium">
+                            <img :src="$page.props.auth.user.image" class="w-[28px] h-[28px] mt-1 rounded-full">
+                        </MenuButton>
+                        <MenuItems
+                            class="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <MenuItem>
+                            <Link href="/dashboard" class="text-blue-900 font-medium block py-3 px-4">Dashboard</Link>
+                            </MenuItem>
+                            <MenuItem>
+                            <Link href="/settings" class="text-blue-900 font-medium block py-3 px-4">Settings</Link>
+                            </MenuItem>
+                            <MenuItem>
+                            <Link href="/logout" method="post" as="button"
+                                class="text-blue-900 font-medium block py-3 px-4">Logout</Link>
+                            </MenuItem>
+                        </MenuItems>
+                    </Menu>
                 </div>
                 <div class="items-center space-x-4" v-else>
-                    <Link href="/login" class="text-blue-900 font-medium">Login</Link>
-                    <Link href="/register" class="text-blue-900 font-medium">Register</Link>
+
+                    <Menu as="div" class="relative inline-block text-left">
+                        <MenuButton class="font-medium">
+                            <img :src="computedImageSrc" class="w-[28px] h-[28px] mt-1">
+                        </MenuButton>
+                        <MenuItems
+                            class="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <MenuItem>
+                            <Link href="/login" class="text-blue-900 font-medium block py-3 px-4">Login</Link>
+                            </MenuItem>
+                            <MenuItem>
+                            <Link href="/register" class="text-blue-900 font-medium block py-3 px-4">Register</Link>
+                            </MenuItem>
+                        </MenuItems>
+                    </Menu>
+
                 </div>
+
             </div>
         </header>
 
@@ -35,5 +66,14 @@
 </template>
 
 <script setup>
+import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
+import { defineProps, computed } from 'vue';
+let props = defineProps({
+    image: String,
+});
+
+const computedImageSrc = computed(() => {
+    return props.image ? props.image : '/images/avatar.png';
+});
 
 </script>
